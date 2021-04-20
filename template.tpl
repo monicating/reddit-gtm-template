@@ -200,11 +200,13 @@ var getRdt = function() {
   return copyFromWindow('rdt');
 };
 
-var advancedParams = data.advancedMatchingParams && data.advancedMatchingParams.length ? makeTableMap(data.advancedMatchingParams, 'name', 'value') : {};
+var initData = data.advancedMatchingParams && data.advancedMatchingParams.length ? makeTableMap(data.advancedMatchingParams, 'name', 'value') : {};
+
+initData.integration = 'gtm';
 
 var _rdt = getRdt();
 if (!_rdt.advertiserId) {
-  _rdt('init', data.id, advancedParams);
+  _rdt('init', data.id, initData);
 }
 
 if (!data.enableFirstPartyCookies) {
@@ -609,17 +611,18 @@ scenarios:
       ],
     };
 
-    const expectedAdvancedParams = {
+    const expected = {
       optOut: 1,
       email: 'alice@example.com',
       aaid: 'cdda802e-fb9c-47ad-9866-0794d394c912',
-      idfa: 'EA7583CD-A667-48BC-B806-42ECB2B48606'
+      idfa: 'EA7583CD-A667-48BC-B806-42ECB2B48606',
+      integration: 'gtm'
     };
 
     mock('copyFromWindow', key => {
       if (key === 'rdt') return function() {
          if (arguments[0] === 'init') {
-          assertThat(arguments[2], 'Advanced matching parameters incorrect').isEqualTo(expectedAdvancedParams);
+          assertThat(arguments[2], 'Advanced matching parameters incorrect').isEqualTo(expected);
         }
       };
     });
@@ -630,12 +633,13 @@ scenarios:
     // Verify that the tag finished successfully.
     assertApi('makeTableMap').wasCalledWith(mockData.advancedMatchingParams, 'name', 'value');
     assertApi('gtmOnSuccess').wasCalled();
-- name: Test Advertiser ID
+- name: Test pixel init - set Advertiser ID and integration type
   code: |-
     mock('copyFromWindow', key => {
       if (key === 'rdt') return function() {
         if (arguments[0] === 'init') {
           assertThat(arguments[1], 'Incorrect Advertiser ID').isEqualTo(mockData.id);
+          assertThat(arguments[2], 'Integration type not set').isEqualTo({integration: 'gtm'});
         }
       };
     });
