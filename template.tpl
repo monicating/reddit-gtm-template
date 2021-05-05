@@ -30,7 +30,7 @@ ___TEMPLATE_PARAMETERS___
 
 [
   {
-    "help": "You can find your advertiser ID at http://ads.reddit.com/conversions#gtm",
+    "help": "You can find your advertiser ID at \u003ca href\u003d\"http://ads.reddit.com/conversions#gtm\"\u003ehttp://ads.reddit.com/conversions#gtm\u003c/a\u003e",
     "valueValidators": [
       {
         "type": "NON_EMPTY"
@@ -127,10 +127,6 @@ ___TEMPLATE_PARAMETERS___
             "type": "SELECT",
             "selectItems": [
               {
-                "value": "optOut",
-                "displayValue": "Opt Out"
-              },
-              {
                 "value": "email",
                 "displayValue": "Email"
               },
@@ -141,6 +137,10 @@ ___TEMPLATE_PARAMETERS___
               {
                 "value": "idfa",
                 "displayValue": "IDFA"
+              },
+              {
+                "value": "externalId",
+                "displayValue": "External ID"
               }
             ],
             "isUnique": true,
@@ -166,8 +166,7 @@ ___TEMPLATE_PARAMETERS___
         "paramValue": true,
         "type": "EQUALS"
       }
-    ],
-    "help": "Advanced Matching Parameters must be pushed to the Data Layer."
+    ]
   }
 ]
 
@@ -604,7 +603,6 @@ scenarios:
       enableFirstPartyCookies: true,
       advancedMatching: true,
       advancedMatchingParams: [
-        {name: 'optOut', value: 1},
         {name: 'email', value: 'alice@example.com'},
         {name: 'aaid', value: 'cdda802e-fb9c-47ad-9866-0794d394c912'},
         {name: 'idfa', value: 'EA7583CD-A667-48BC-B806-42ECB2B48606'}
@@ -612,7 +610,6 @@ scenarios:
     };
 
     const expected = {
-      optOut: 1,
       email: 'alice@example.com',
       aaid: 'cdda802e-fb9c-47ad-9866-0794d394c912',
       idfa: 'EA7583CD-A667-48BC-B806-42ECB2B48606',
